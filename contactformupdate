@@ -1,0 +1,228 @@
+<?php
+
+// check for form submission
+if (isset($_POST['submit'])) {
+
+    // inputs from browser
+	$name     = trim($_POST['name']);
+	$phone    = trim($_POST['phone']);
+	$email    = trim($_POST['email']);
+	$dropdown = trim($_POST['dropdown']);
+	$message  = trim($_POST['message']);
+
+    // email recipient as subject
+	$to      = "example@rawad.com";
+	$subject = "New Message";
+
+    // validate inputs
+	$errors = validateInputs($email, $phone, $name, $message);
+
+	if (empty($errors)) {
+        // no errors, send the mail
+		if (mail($to, $subject, $message, "From: $name <$email>")); {
+			return true;
+		}
+		return 'Message failed to send.';
+	} else {
+        // validation errors
+		return implode("<br />", $errors);
+	}
+}
+
+function validateInputs ($email, $phone, $name, $message) {
+	$errors = array();
+
+    // valiate name
+	if ($name === '') {
+		$errors[] = 'Name is required.';
+	}
+
+    // validate message
+	if ($message === '') {
+		$errors[] = 'Message is required.';
+	}
+
+    // validate email
+	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+		$errors[] = 'A valid email is required.';
+	}   
+
+    // valdate phone
+	$regex = "/\\D\*\(\[2\-9\]\\d\{2\}\)\(\\D\*\)\(\[2\-9\]\\d\{2\}\)\(\\D\*\)\(\\d\{4\}\)\\D\*/";
+	preg_match_all($regex, $phone, $matches);
+	if (empty($matches[0])) {
+		$errors[] = 'A valid phone number is required.';
+	}
+
+	return $errors;
+}
+
+?>
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<link href="assets/css/bootstrap.css" rel="stylesheet">
+	<link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+	<header>
+		<div class="container">
+			<img src="assets/images/logo.jpg" alt="The logo">
+		</div>
+	</header>
+	<!--Close Header-->
+
+	<div class="navbar navbar-inverse navbar-static-top">
+		<div class="container">
+			<div class="navbar-header">
+
+
+				<button class="navbar-toggle" data-toggle="collapse" data-target=".navHeaderCollapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+
+			<div class="collapse navbar-collapse navHeaderCollapse">
+
+				<ul class="nav navbar-nav navbar-left">
+					<li><a href="index.html">Home</a></li>
+					<li><a href="aboutus.html">About Us</a></li>
+					<li class="dropdown">
+
+						<li><a href="services.html" class="dropdown-toggle" data-toggle ="dropdown">Services<b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								<li><a href="#">Cash For Cars Edmonton</a></li>
+								<li><a href="#">Car Removals Edmonton </a></li>
+								<li><a href="#">Unwanted Cars Edmonton </a></li>
+								<li><a href="#">Scrap Car Removal Edmonton </a></li>
+								<li><a href="#">Free Car Removal Edmonton </a></li>
+								<li><a href="#">Car Wreckers Edmonton </a></li>
+							</ul>
+							<li class="active"><a href="contact.php">Contact Us</a></li>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<!-- Close container of Navbar-->
+		</div>
+		<!-- Close Navbar-->
+
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+					<form role="form" action="contact.php" method="POST">
+
+						<div class="form-group">
+							<label for="name">Name:</label>
+							<input type="text" class="form-control" id="name" name="name"/>
+						</div>
+
+						<div class="form-group">
+							<label for="phone">Phone:</label>
+							<input type="text" class="form-control" id="phone" name="phone"/>  
+						</div>
+
+						<div class="form-group">
+							<label for="email">Email:</label>
+							<input type="text" class="form-control" id="email" name="email"/>  
+						</div>
+
+
+						<div class="form-group">
+							<label for="dropdown">Where did you hear about us?</label>
+							<select class="form-control" name="dropdown">
+								<option>Google</option>
+								<option>Yahoo</option>
+								<option>Newspaper</option>
+								<option>Others</option>
+							</select> 
+
+						</div>
+
+						<div class="form-group">
+							<label for="message">Message:</label>
+							<textarea class="form-control" name="message" id="message" placeholder="Your message here"></textarea>
+						</div>
+
+						<button type="submit" class="btn btn-default" name="submit">Submit</button>
+
+					</form>
+
+				</div>
+
+				<div class="col-md-6">
+					<h4 class="coninfo">Contact Us</h4>
+					<p class="info">If you have any questions, please don't hesistate to shoot us an email, we will happly respond within 3-5 business days.</p>
+					<p class="info">Phone: 780-340-0725</p>
+					<p class="info">Email: info@edmontontopcashforcars.ca</p>
+					<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d18967.33262752639!2d-113.5139683011796!3d53.54140372357865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x53a02247b272d369%3A0x612824385e498946!2sDowntown%2C+Edmonton%2C+AB!5e0!3m2!1sen!2sca!4v1446594469304" width="100%" class="map" frameborder="0" style="border:0" allowfullscreen></iframe>
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+
+
+		<div class="top-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4">
+						<h4>CONTACT INFORMATION</h4>
+						<h5>Edmonton Car Removals & Cash for Cars</h5>
+						<ul class="contact-info">
+							<li><span>P:</span><a href="tel:780-340-0725"> 780-340-0725</li></a>
+							<li><span>E:</span><a href="mailto:info@edmontontopcashforcars.ca?Subject=Hello%20again"> info@edmontontopcashforcars.ca</li></a>
+							<li>www.edmontontopcashforcars.ca</li>
+						</ul>
+					</div>
+
+					<div class="col-md-8 footer-coninfo">
+						<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d18967.33262752639!2d-113.5139683011796!3d53.54140372357865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x53a02247b272d369%3A0x612824385e498946!2sDowntown%2C+Edmonton%2C+AB!5e0!3m2!1sen!2sca!4v1446594469304" width="100%" class="map" frameborder="0" style="border:0" allowfullscreen></iframe>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<div class="bottom-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6">
+						<p>© Copyright 2015 Edmonton Top Cash For Cars | All Rights Reserved </p>
+					</div>
+
+					<div class="col-md-6">
+						<ul class="footer-links">
+							<li><a href="#">Home</a></li>
+							<li><a href="#">Services</a></li>
+							<li><a href="#">Resources</a></li>
+							<li><a href="#">Privacy Policy</a></li>
+							<li><a href="#">Sitemap</a></li>
+							<li><a href="#">Info</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="assets/js/bootstrap.min.js"></script>
+	</body>
+	</html>
