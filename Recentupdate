@@ -1,0 +1,266 @@
+<?php
+$strValidateMessage = "";
+
+
+
+// check for form submission
+if (isset($_POST['submit'])) {
+
+    // inputs from browser
+	$name     = trim($_POST['name']);
+	$phone    = trim($_POST['phone']);
+	$email    = trim($_POST['email']);
+	$suburb   = trim($_POST['suburb']);
+	$dropdown = trim($_POST['dropdown']);
+	$message  = trim($_POST['message']);
+
+
+    // email recipient as subject
+	$to      = "contact@rawadmerhi.com";
+	$subject = "New Message";
+
+    // validate inputs
+	$errors = validateInputs($name,$phone,$email,$suburb,$message);
+
+	if (empty($errors)) {
+         // no errors, send the mail
+		if (mail($to, $subject, $message, "From: $name <$email>")) {
+			$strValidateMessage = 'Your message has been sent';
+		}else {
+			$strValidateMessage = 'Message failed to send.';
+		}
+	} else {
+        // validation errors
+		$strValidateMessage = implode("<br />", $errors);
+		
+	}
+
+}
+
+function validateInputs ($name, $phone, $email, $suburb, $message) {
+	$errors = array();
+
+    // valiate name
+	if ($name === '') {
+		$errors[] = 'Name is required.';
+	}
+
+	 // valdate phone
+
+	if(strlen($phone) != 10){
+		$errors[] = 'A valid phone number is required.';
+	}
+
+	// validate email
+	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+		$errors[] = 'A valid email is required.';
+	}   
+
+	$suburbs = [
+	"st.albert",
+	"acheson",
+	"devon",
+	"nisku",
+	"leduc",
+	"beaumont",
+	"sherwood park", 
+	"fort saskatchewan"
+	];
+
+	if (!in_array(trim(strtolower($suburb)), $suburbs)) {
+		$errors[] = ' Please enter a residential area.';
+	}
+
+
+    // validate message
+	if ($message === '') {
+		$errors[] = 'Message is required.';
+	}
+
+	return $errors;
+}
+
+?>
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="description"content="Edmonton Top Cash For Cars ">
+	<meta name="keywords" content="car removals,edmonton, car service, towing services, car recycle, Scrap Car Recyclers, vehicles removal,Cash For Cars, Car Removal Towing,Edmonton Cash for Cars,Old Car Removal">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Contact Us</title>
+	<link href="assets/css/bootstrap.css" rel="stylesheet">
+	<link href="assets/css/style.css" rel="stylesheet">
+	<link rel="icon"type="image/png"href="assets/images/topcashforsalefavicon.ico">
+</head>
+<body>
+
+	<header>
+		<div class="container">
+			<div class="col-md-6 logo col-sm-6">
+				 <img src="assets/images/edtopcashlogo.png" alt="The logo" class="logo">
+			</div>
+
+			<div class="col-md-6 col-sm-6 ">
+			<h4 class="header-phone"><a href="tel:780-340-0725">780-340-0725</a><a href="tel:780-884-8221">780-884-8221</a> </h4>
+			</div>
+		</div>
+	</header>
+	<!--Close Header-->
+
+	<div class="navbar navbar-inverse navbar-static-top">
+		<div class="container">
+			<div class="navbar-header">
+
+
+				<button class="navbar-toggle" data-toggle="collapse" data-target=".navHeaderCollapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+
+			<div class="collapse navbar-collapse navHeaderCollapse">
+
+				<ul class="nav navbar-nav navbar-left">
+					<li><a href="index.html">Home</a></li>
+					<li><a href="aboutus.html">About Us</a></li>
+					<li><a href="services.html">Services</a></li>
+					<li class="active"><a href="contact.php">Contact Us</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+			
+
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+					<form role="form" action="contact.php" method="POST">
+
+						<div class="form-group">
+							<label for="name">Name:</label>
+							<input type="text" class="form-control" id="name" name="name" />
+						</div>
+
+						<div class="form-group">
+							<label for="phone">Phone:</label>
+							<input type="text" class="form-control" id="phone" name="phone"/>  
+						</div>
+
+						<div class="form-group">
+							<label for="email">Email:</label>
+							<input type="text" class="form-control" id="email" name="email"/>  
+						</div>
+
+						<div class="form-group">
+							<label for="suburb">Suburb:</label>
+							<input type="text" class="form-control" id="suburb" name="suburb"/>  
+						</div>
+
+
+						<div class="form-group">
+							<label for="dropdown">Where did you hear about us?</label>
+							<select class="form-control" name="dropdown">
+								<option>Google</option>
+								<option>Yahoo</option>
+								<option>Newspaper</option>
+								<option>Others</option>
+							</select> 
+
+						</div>
+
+						<div class="form-group">
+							<label for="message">Message:</label>
+							<textarea class="form-control" name="message" id="message" placeholder="Your message here"></textarea>
+						</div>
+
+						<button type="submit" class="btn btn-default" name="submit">Submit</button>
+						
+
+						<?php 
+						if ($strValidateMessage !== "") {
+							echo '<h4 class="errors-display">';
+							echo $strValidateMessage;
+							echo "</h4>";
+						}
+
+						?>
+					</form>
+
+				</div>
+
+				<div class="col-md-6">
+					<h4 class="con-info-title">Contact Us</h4>
+					<p class="info">If you have any questions, please don't hesistate to shoot us an email, we will happly respond within 3-5 business days.</p>
+					<ul class="companyinfo">
+						<li><span>P:</span><a href="tel:780-340-0725"> 780-340-0725</a> | <a href="tel:780-884-8221">780-884-8221</a></li>
+						<li><span>E:</span><a href="mailto:info@edmontontopcashforcars.ca?Subject=Hello%20again"> info@edmontontopcashforcars.ca</a></li>  
+					</ul>
+
+					<h4 class="con-info-title">Operating Hours</h4>
+						<h4>Monday - Sunday: 6:00am – 11:00pm</h4>
+					
+					
+				</div>
+			</div>
+		</div>
+
+
+
+
+
+
+		<div class="top-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4">
+						<h4>CONTACT INFORMATION</h4>
+						<h5>Edmonton Car Removals & Cash for Cars</h5>
+						<ul class="footer-contact-info">
+							<li><span>P:</span><a href="tel:780-340-0725"> 780-340-0725</a> | <a href="tel:780-884-8221">780-884-8221</a></li>
+							<li><span>E:</span><a href="mailto:info@edmontontopcashforcars.ca?Subject=Hello%20again"> info@edmontontopcashforcars.ca</li></a>
+							<li>www.edmontontopcashforcars.ca</li>
+						</ul>
+					</div>
+
+					<div class="col-md-8 footer-coninfo">
+						<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d18967.33262752639!2d-113.5139683011796!3d53.54140372357865!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x53a02247b272d369%3A0x612824385e498946!2sDowntown%2C+Edmonton%2C+AB!5e0!3m2!1sen!2sca!4v1446594469304" width="100%" class="map" frameborder="0" style="border:0" allowfullscreen></iframe>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<div class="bottom-footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6">
+						<p>© 2015 Edmonton Top Cash For Cars | Website By: <a href="http://www.rawadmerhi.com">Rawad Merhi</a></p>
+					</div>
+
+					<div class="col-md-6">
+						<ul class="footer-links">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="services.html">Services</a></li>
+							<li><a href="resources.html">Resources</a></li>
+							<li><a href="privacypolicy.html">Privacy Policy</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+		<script src="assets/js/bootstrap.min.js"></script>
+	</body>
+	</html>
